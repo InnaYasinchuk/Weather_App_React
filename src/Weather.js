@@ -47,7 +47,7 @@ export default function Weather() {
       <div className="weather-forecast" id="forecast"></div>
       <div>
         <a
-          href="https://github.com/InnaYasinchuk/Weather-app"
+          href="https://github.com/InnaYasinchuk/Weather_App_React"
           className="author"
           target="_blank"
         >
