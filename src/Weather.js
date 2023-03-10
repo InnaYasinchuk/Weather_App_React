@@ -2,25 +2,31 @@ import React, {useState} from "react";
 import axios from 'axios';
 import "./Weather.scss";
 
-export default function Weather() {
+export default function Weather(props) {
 
-  const [temperature, setTemperature] = useState(null);
   const [ready, setReady] = useState(false);
+  const [weatherData, setWeatherData] = useState({ready:false})
 
   function handleResponse(response) {
-    setTemperature(Math.round(response.data.main.temp));
-    setReady(true);
+        
+    setWeatherData({
+      ready: true,
+      city: response.data.name,
+      date: 'Wednesday',
+      temperature:Math.round(response.data.main.temp),
+      description: response.data.weather[0].description,
+      wind: Math.round(response.data.wind.speed),
+      humidity: Math.round(response.data.main.humidity),
+      icon: `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`,
+      descriptionIcon: response.data.weather[0].description,
+    })
+    
 
   }
 
-  let apiKey = "e28a7272e21d11872e3e9e3a2498fa94";
-  // 2bd326a60dc89a53287e446e819664df
-  let city = 'London';
-  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-  axios.get(apiUrl).then(handleResponse);
-
-  return (
-    <section className="full-screen">
+  if (weatherData.ready){
+return (
+    <div className="full-screen">
       <br />
       <form action="" id="search-form">
         <input
@@ -28,18 +34,17 @@ export default function Weather() {
           placeholder="Choose your city 🌍"
           className="input"
           id="input"
-          // autocomplete="off"
-        />
+         />
         <input type="submit" value="Go !!!" className="button" />
       </form>
       <h4 className="date" id="date">
-        Today
+        Today is {weatherData.date}
       </h4>
       <div className="city">
         <div className="current-city">
-          <h1>{city}</h1>
+          <h1>{weatherData.city}</h1>
           <div className="h2">
-            <span id="temperature">{temperature + ' '}</span>
+            <span id="temperature">{weatherData.temperature} </span>
             <span className="fahrenheit">
               <a href="#" id="celsius">
                 °C
@@ -54,12 +59,12 @@ export default function Weather() {
       </div>
       <div className="details">
         <div className="icon">
-          <img id="icon" src="" alt="" width="110px" />
+          <img id="icon" src={weatherData.icon} alt={weatherData.descriptionIcon} width="110px" />
         </div>
         <div className="details-item">
-          <p id="description">Sky:</p>
-          <p id="wind">Wind:</p>
-          <p id="humidity">Humidity:</p>
+          <p id="description">Sky: {weatherData.description}</p>
+          <p id="wind">Wind: {weatherData.wind} km/h</p>
+          <p id="humidity">Humidity: {weatherData.humidity} %</p>
         </div>
       </div>
       <div className="weather-forecast" id="forecast"></div>
@@ -72,6 +77,13 @@ export default function Weather() {
           Created by Inna Yasynchuk
         </a>
       </div>
-    </section>
+    </div>
   );
+  } else {
+ let apiKey = "e28a7272e21d11872e3e9e3a2498fa94";
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${props.defaultCity}&appid=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(handleResponse);
+  return 'Loading ...';
+  }
+ 
 }
