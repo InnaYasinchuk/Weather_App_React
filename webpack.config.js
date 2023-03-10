@@ -3,15 +3,15 @@ const HTMLWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const TreserPlugin = require("terser-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 const isProd = process.env.NODE_ENV === "production";
 
 module.exports = {
-  entry: "./index.js",
+  entry: "./src/index.jsx",
   mode: "development",
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "dist/"),
     filename: "[name].[hash].js",
   },
   devServer: {
@@ -20,7 +20,8 @@ module.exports = {
   },
   plugins: [
     new HTMLWebpackPlugin({
-      template: "./index.html",
+      template: "./public/index.html",
+      filename: "index.html",
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
@@ -33,30 +34,25 @@ module.exports = {
         test: /\.s[ac]ss$/,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
-      {
-        test: /\.(js|jsx)$/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-react"],
-          },
-        },
-        exclude: /node_modules/,
-      },
+     
       {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-        },
-      },
+  test: /\.(js|jsx)$/,
+  exclude: /node_modules/,
+  use: {
+    loader: "babel-loader",
+    options: {
+      presets: ["@babel/preset-env", "@babel/preset-react"],
+    },
+  },
+},
+
     ],
   },
   optimization: {
-    minimizer: isProd ? [new CssMinimizerPlugin(), new TreserPlugin()] : [],
+    minimizer: isProd ? [new CssMinimizerPlugin(), new TerserPlugin()] : [],
   },
 };

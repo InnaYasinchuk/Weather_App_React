@@ -1,6 +1,24 @@
-import React from "react";
+import React, {useState} from "react";
+import axios from 'axios';
+import "./Weather.scss";
 
 export default function Weather() {
+
+  const [temperature, setTemperature] = useState(null);
+  const [ready, setReady] = useState(false);
+
+  function handleResponse(response) {
+    setTemperature(Math.round(response.data.main.temp));
+    setReady(true);
+
+  }
+
+  let apiKey = "e28a7272e21d11872e3e9e3a2498fa94";
+  // 2bd326a60dc89a53287e446e819664df
+  let city = 'London';
+  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(handleResponse);
+
   return (
     <section className="full-screen">
       <br />
@@ -10,7 +28,7 @@ export default function Weather() {
           placeholder="Choose your city 🌍"
           className="input"
           id="input"
-          autocomplete="off"
+          // autocomplete="off"
         />
         <input type="submit" value="Go !!!" className="button" />
       </form>
@@ -19,9 +37,9 @@ export default function Weather() {
       </h4>
       <div className="city">
         <div className="current-city">
-          <h1></h1>
+          <h1>{city}</h1>
           <div className="h2">
-            <span id="temperature"></span>
+            <span id="temperature">{temperature + ' '}</span>
             <span className="fahrenheit">
               <a href="#" id="celsius">
                 °C

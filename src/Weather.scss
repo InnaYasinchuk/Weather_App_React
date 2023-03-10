@@ -1,5 +1,12 @@
-/* 
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-family: "Yeseva One", cursive;
+  color: #030332;
+}
 
 form {
   display: flex;
@@ -255,4 +262,3 @@ p:hover {
     font-size: 14px;
   }
 }
- */
