@@ -16,7 +16,7 @@ module.exports = {
   },
   devServer: {
     watchFiles: path.resolve(__dirname, "src"),
-    port: 3000,
+    port: 3005,
   },
   plugins: [
     new HTMLWebpackPlugin({
