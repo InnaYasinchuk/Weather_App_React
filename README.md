@@ -1,1 +1,1 @@
-Нosting on the page https://weather-forecast-appp.netlify.app/
+App is hosted at https://weather-forecast-appp.netlify.app/
